@@ -16,6 +16,7 @@ namespace SKUSystem
     {
         public string ScanCode { get; set; }
         public string SetStatus { get; set; }
+        public DateTime Date { get; set; }
         
        
         
@@ -41,8 +42,9 @@ namespace SKUSystem
 
         public string UpdateStatusQuery = @"Update SKU
                                                      set 
-                                                            status_id = @SetStatus 
-                                                     where 
+                                                            status_id = @SetStatus,
+                                                            Change_date = @Date 
+                                                     where  
                                                             scancode = @Scancode;";
                                           
 
@@ -62,7 +64,6 @@ namespace SKUSystem
             try
             {
                 con.Open();
-                
                 SqlDataReader readerSKU = cmd.ExecuteReader();
 
                 if (readerSKU.HasRows)
@@ -73,24 +74,18 @@ namespace SKUSystem
                         Console.WriteLine("Наименование: {0}\nОписание: {1}\nСостояние: {2}",
                              readerSKU.GetString(0),
                              readerSKU.GetString(1),
-                             readerSKU.GetString(2));
-                            
-
-
+                             readerSKU.GetString(2));                            
                     }
-                    readerSKU.Close();
 
+                    readerSKU.Close();
                     cmd = new SqlCommand(SelectStatusesQuery);
                     cmd.Connection = con;
                     SqlDataReader readerStatus  = cmd.ExecuteReader();
-
                     Console.WriteLine("Выберите статус: ");
                     
                     while (readerStatus.Read())
                     {
-                        Console.WriteLine("{0} - {1}",  readerStatus.GetInt32(0), readerStatus.GetString(1));
-
-                        
+                        Console.WriteLine("{0} - {1}",  readerStatus.GetInt32(0), readerStatus.GetString(1));                          
                     }
                     readerStatus.NextResult();
                     CheckData();
@@ -101,14 +96,9 @@ namespace SKUSystem
                     Console.WriteLine("Данные не найдены");
                     Console.ReadKey();
                     Console.Clear();
-                    
-                    GetData();
-                    
-                
+                    GetData(); 
                 }
-
         }
-
             catch
             {
            
@@ -122,8 +112,11 @@ namespace SKUSystem
         {
             var con = new SqlConnection(Config.connectiontring);
             var cmd = new SqlCommand(UpdateStatusQuery);
+            Date = DateTime.Now;
             cmd.Parameters.Add("@SetStatus", SqlDbType.Int).Value = SetStatus;
             cmd.Parameters.Add("@ScanCode", SqlDbType.NVarChar).Value = ScanCode;
+            cmd.Parameters.Add("@Date", SqlDbType.DateTime).Value = Date;
+
             cmd.Connection = con;
             con.Open();
             cmd.ExecuteNonQuery();
@@ -131,7 +124,6 @@ namespace SKUSystem
             Console.ReadKey();
             Console.Clear();
             GetData();
-
         }
 
         public void CheckData()
@@ -142,8 +134,7 @@ namespace SKUSystem
             {
                 Console.WriteLine("Недопустимый ввод");
                 //Console.Clear();
-                CheckData();
-                  
+                CheckData();                  
                  
             }
             else
