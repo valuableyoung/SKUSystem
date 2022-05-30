@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32421.90
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SKUSystem", "SKUSystem\SKUSystem.csproj", "{2CCC615D-5026-4E86-9027-10104A07B29C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2CCC615D-5026-4E86-9027-10104A07B29C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CCC615D-5026-4E86-9027-10104A07B29C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CCC615D-5026-4E86-9027-10104A07B29C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CCC615D-5026-4E86-9027-10104A07B29C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {97FB11A2-B229-4268-8409-A39C1B6F8410}
+	EndGlobalSection
+EndGlobal
