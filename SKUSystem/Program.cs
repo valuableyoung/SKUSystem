@@ -13,7 +13,8 @@ namespace MyApp // Note: actual namespace depends on the project name.
             
             
             DatabaseManipulator db = new DatabaseManipulator();
-            db.GetData();
+            db.NextSession(3);
+
 
         }
     }

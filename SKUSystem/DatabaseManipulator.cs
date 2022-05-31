@@ -50,11 +50,10 @@ namespace SKUSystem
 
 
 
-        public void GetData()
+        public void GetData(string scancode)
         {
-            Console.WriteLine("Отсканируйте код:");
-            ScanCode = Convert.ToString(Console.ReadLine());
-
+            
+            ScanCode = scancode;
             var con = new SqlConnection(Config.connectiontring);
             var cmd  = new SqlCommand(SelectTestQuery);
             cmd.Parameters.Add("@ScanCode", SqlDbType.NVarChar).Value = ScanCode;
@@ -93,10 +92,7 @@ namespace SKUSystem
                 }
                 else
                 {
-                    Console.WriteLine("Данные не найдены");
-                    Console.ReadKey();
-                    Console.Clear();
-                    GetData(); 
+                    NextSession(2);
                 }
         }
             catch
@@ -120,10 +116,46 @@ namespace SKUSystem
             cmd.Connection = con;
             con.Open();
             cmd.ExecuteNonQuery();
-            Console.WriteLine("Статус успешно обновлен");
-            Console.ReadKey();
+
+            NextSession(0);
+            
+        }
+        
+        public void NextSession(int a)
+        {
             Console.Clear();
-            GetData();
+            int variant = a;
+            switch (variant)
+            {
+                case 0: Console.WriteLine("Статус успешно обновлен");
+                        Console.WriteLine("Отсканируйте код:");
+                    break;
+                case 1: Console.WriteLine("Отмена подтверждена");
+                        Console.WriteLine("Отсканируйте код:");
+                    break;
+                case 2: Console.WriteLine("Данные не найдены");
+                        Console.WriteLine("Отсканируйте код:");
+                    break;
+                case 3: Console.WriteLine("Отсканируйте код:");                       
+                    break;
+                case 4: Console.WriteLine("Отсканируйте код:");
+                        GetData(SetStatus);
+                    break;
+            }
+            if (variant != 4)
+            {
+                string s = Convert.ToString(Console.ReadLine());
+                GetData(s);
+            }
+            
+        }
+
+        public void CheckNewScanCode(string SetStatus) 
+        {
+            if(SetStatus.Contains('@'))
+            {
+                NextSession(4);
+            }
         }
 
         public void CheckData()
@@ -132,24 +164,27 @@ namespace SKUSystem
             
             if ((SetStatus != "1") && (SetStatus != "2") && (SetStatus != "3"))
             {
+                CheckNewScanCode(SetStatus);
                 Console.WriteLine("Недопустимый ввод");
                 //Console.Clear();
                 CheckData();                  
                  
             }
             else
+
             {
                 Console.WriteLine("1 - подтвердить, любая другая цифра - отмена");
-                if (Console.ReadLine() == "1")
-                {
+                string confirmstatus = Convert.ToString(Console.ReadLine());
+                if (confirmstatus == "1")
+                { 
+               
                     Console.WriteLine("Подтверждено!\nИдет отправка данных на сервер");
                     SetData(SetStatus);
                 }
-                else if (Console.ReadLine() != "1")
+                else if (confirmstatus != "1")
                 {
-                    Console.Clear();
-                    Console.WriteLine("Отмена подтверждена");
-                    GetData();
+                    CheckNewScanCode(confirmstatus);
+                    NextSession(1);
                 }
                 
             }
